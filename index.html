@@ -1,36 +1,25 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <script src="https://cdn.jsdelivr.net/npm/aframe@1.2.0/dist/aframe.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/mind-ar/dist/mindar-aframe.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Camera Test</title>
   </head>
   <body>
-    <script>
-      AFRAME.registerComponent('play-video-on-marker', {
-        init: function () {
-          const marker = this.el;
-          const video = document.querySelector('#my-video');
-          marker.addEventListener('targetFound', () => {
-            video.play();
-          });
-          marker.addEventListener('targetLost', () => {
-            video.pause();
-          });
-        },
-      });
-    </script>
+    <h1>Camera Test</h1>
+    <video id="camera" autoplay playsinline style="width: 100%;"></video>
 
-    <a-scene mindar-image>
-      <a-assets>
-        <video id="my-video" src="example.mp4" loop></video>
-      </a-assets>
-      <a-camera position="0 0 0" look-controls></a-camera>
-      <a-entity
-        mindar-image-target="targetIndex: 0"
-        play-video-on-marker
-      >
-        <a-video src="#my-video" width="2" height="1"></a-video>
-      </a-entity>
-    </a-scene>
+    <script>
+      const video = document.getElementById('camera');
+
+      // カメラを起動する処理
+      navigator.mediaDevices.getUserMedia({ video: true })
+        .then((stream) => {
+          video.srcObject = stream;
+        })
+        .catch((error) => {
+          console.error('カメラの起動に失敗しました:', error);
+        });
+    </script>
   </body>
 </html>
