@@ -4,26 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>A-Frame with mindAR - Rear Camera</title>
+    <!-- A-Frameライブラリ -->
     <script src="https://cdn.jsdelivr.net/npm/aframe@1.2.0/dist/aframe.min.js"></script>
+    <!-- mindARライブラリ -->
     <script src="https://cdn.jsdelivr.net/npm/mind-ar/dist/mindar-aframe.min.js"></script>
   </head>
   <body>
     <h1 style="text-align: center;">A-Frame + mindAR Rear Camera</h1>
     <a-scene mindar-image embedded>
+      <!-- mindARによるカメラ制御 -->
       <a-camera position="0 0 0" look-controls></a-camera>
     </a-scene>
-    <script>
-      const constraints = {
-        video: { facingMode: { exact: "environment" } } // リアカメラを指定
-      };
 
-      navigator.mediaDevices.getUserMedia(constraints)
-        .then((stream) => {
-          const videoTracks = stream.getVideoTracks();
-          console.log("使用中のカメラ:", videoTracks[0].label);
-        })
-        .catch((error) => {
-          console.error("カメラの起動に失敗:", error);
+    <script>
+      // デバイスのカメラ情報を取得してリアカメラを選択
+      navigator.mediaDevices.enumerateDevices()
+        .then((devices) => {
+          const videoDevices = devices.filter(device => device.kind === 'videoinput');
+          const rearCamera = videoDevices.find(device => device.label.toLowerCase().includes('back'));
+          if (rearCamera) {
+            navigator.mediaDevices.getUserMedia({
+              video: { deviceId: rearCamera.deviceId }
+            }).then((stream) => {
+              const videoTracks = stream.getVideoTracks();
+              console.log("使用中のリアカメラ:", videoTracks[0].label);
+              // mindARが自動的にカメラストリームを取得し、表示します
+            }).catch((error) => {
+              console.error("リアカメラの起動に失敗:", error);
+            });
+          } else {
+            console.error("リアカメラが見つかりませんでした");
+          }
+        }).catch((error) => {
+          console.error("デバイス情報の取得に失敗:", error);
         });
     </script>
   </body>
