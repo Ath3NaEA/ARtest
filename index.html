@@ -3,17 +3,23 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A-Frame with mindAR</title>
-    <!-- A-Frameライブラリ -->
-    <script src="https://cdn.jsdelivr.net/npm/aframe@1.2.0/dist/aframe.min.js"></script>
-    <!-- mindARライブラリ -->
-    <script src="https://cdn.jsdelivr.net/npm/mind-ar/dist/mindar-aframe.min.js"></script>
+    <title>Camera Test</title>
   </head>
   <body>
-    <h1 style="text-align: center;">A-Frame + mindAR Camera Test</h1>
-    <a-scene mindar-image embedded>
-      <!-- mindARがカメラを制御 -->
-      <a-camera position="0 0 0" look-controls></a-camera>
-    </a-scene>
+    <h1>Camera Test</h1>
+    <video id="camera" autoplay playsinline style="width: 100%;"></video>
+
+    <script>
+      const video = document.getElementById('camera');
+
+      // カメラを起動する処理
+      navigator.mediaDevices.getUserMedia({ video: true })
+        .then((stream) => {
+          video.srcObject = stream;
+        })
+        .catch((error) => {
+          console.error('カメラの起動に失敗しました:', error);
+        });
+    </script>
   </body>
 </html>
