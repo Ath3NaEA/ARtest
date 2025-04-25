@@ -1,24 +1,16 @@
 <!DOCTYPE html>
 <html>
-<head>
+  <head>
+    <title>Camera Test</title>
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/MindAR-js/aframe/dist/aframe.min.js"></script>
-</head>
-<body>
-    <a-scene embedded arjs="sourceType: webcam;">
-        <!-- MindARのターゲットファイルを読み込む -->
-        <a-assets>
-            <a-asset-item id="my-target" src="path_to_your_targets.mind"></a-asset-item>
-        </a-assets>
+  </head>
+  <body>
+    <a-scene embedded>
+      <!-- カメラ -->
+      <a-entity camera></a-entity>
 
-        <!-- マーカーを配置 -->
-        <a-marker type="mindar" target="#my-target">
-            <!-- 動画を再生 -->
-            <a-video src="video.mp4" width="4" height="3" position="0 0 0" autoplay="true"></a-video>
-        </a-marker>
-
-        <!-- カメラ -->
-        <a-entity camera></a-entity>
+      <!-- 地面を表示（任意）-->
+      <a-plane position="0 0 -5" rotation="-90 0 0" width="10" height="10" color="#7BC8A4"></a-plane>
     </a-scene>
-</body>
+  </body>
 </html>
