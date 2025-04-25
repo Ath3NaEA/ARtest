@@ -1,25 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>WebAR Basic Camera Test</title>
-  <script src="https://cdn.jsdelivr.net/npm/aframe@1.2.0/dist/aframe.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mind-ar/dist/mindar-aframe.min.js"></script>
-</head>
-<body>
-  <a-scene mindar-image embedded>
-    <a-camera position="0 0 0" look-controls></a-camera>
-  </a-scene>
-  <script>
-    // インカメラ（フロントカメラ）の起動を明示的に指定
-    navigator.mediaDevices.getUserMedia({
-      video: { facingMode: "user" } // "user" はインカメラを意味する
-    }).then((stream) => {
-      console.log("インカメラが正常に起動しました");
-    }).catch((error) => {
-      console.error("カメラ起動に失敗しました:", error);
-    });
-  </script>
-</body>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A-Frame with mindAR</title>
+    <!-- A-Frameライブラリ -->
+    <script src="https://cdn.jsdelivr.net/npm/aframe@1.2.0/dist/aframe.min.js"></script>
+    <!-- mindARライブラリ -->
+    <script src="https://cdn.jsdelivr.net/npm/mind-ar/dist/mindar-aframe.min.js"></script>
+  </head>
+  <body>
+    <h1 style="text-align: center;">A-Frame + mindAR Camera Test</h1>
+    <a-scene mindar-image embedded>
+      <!-- mindARがカメラを制御 -->
+      <a-camera position="0 0 0" look-controls></a-camera>
+    </a-scene>
+  </body>
 </html>
