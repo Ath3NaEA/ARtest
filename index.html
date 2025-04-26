@@ -2,18 +2,19 @@
 <html>
   <head>
     <meta charset="UTF-8" />
-    <title>MindAR + Video (iOS対応)</title>
+    <title>MindAR Video with Permission</title>
     <script src="https://cdn.jsdelivr.net/npm/aframe@1.5.0/dist/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
     <style>
       body { margin: 0; overflow: hidden; }
-      #start-button {
+      #play-button {
+        display: none;
         position: absolute;
-        top: 50%;
+        top: 80%;
         left: 50%;
         transform: translate(-50%, -50%);
-        z-index: 10;
-        background: white;
+        z-index: 20;
+        background: rgba(255,255,255,0.9);
         padding: 1em 2em;
         font-size: 1.2em;
         border-radius: 10px;
@@ -21,10 +22,12 @@
     </style>
   </head>
   <body>
-    <div id="start-button">
-      <button id="start-ar">Start AR</button>
+    <!-- ✅ 再生ボタン -->
+    <div id="play-button">
+      <button onclick="playVideo()">▶️ 再生</button>
     </div>
 
+    <!-- ✅ ARシーン -->
     <a-scene
       mindar-image="imageTargetSrc: https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/examples/image-tracking/assets/card-example/card.mind"
       embedded
@@ -47,6 +50,7 @@
 
       <a-entity mindar-image-target="targetIndex: 0" video-handler>
         <a-video
+          id="video-screen"
           src="#my-video"
           width="1.78"
           height="1"
@@ -59,38 +63,27 @@
     </a-scene>
 
     <script>
-      document.querySelector("#start-ar").addEventListener("click", async () => {
-        const video = document.querySelector("#my-video");
+      const video = document.querySelector("#my-video");
+      const playButtonUI = document.querySelector("#play-button");
 
-        try {
-          // 一度再生して即停止 → ユーザー操作認識対策
-          await video.play();
-          video.pause();
+      function playVideo() {
+        video.play();
+        playButtonUI.style.display = "none";
+      }
 
-          // UI非表示
-          document.querySelector("#start-button").style.display = "none";
-
-          // MindAR起動
-          const scene = document.querySelector("a-scene");
-          await scene.components["mindar-image"].start();
-
-        } catch (err) {
-          console.error("起動時にエラー:", err);
-          alert("ビデオまたはARの起動に失敗しました。");
-        }
-      });
-
-      // video-handler コンポーネント登録
       AFRAME.registerComponent("video-handler", {
         init: function () {
-          const video = document.querySelector("#my-video");
           this.el.addEventListener("targetFound", () => {
-            video.play();
+            // マーカーを検出したら再生ボタンを表示
+            playButtonUI.style.display = "block";
           });
+
           this.el.addEventListener("targetLost", () => {
+            // マーカーを失ったら再生を停止し、再生ボタン非表示
             video.pause();
+            playButtonUI.style.display = "none";
           });
-        },
+        }
       });
     </script>
   </body>
