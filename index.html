@@ -14,12 +14,17 @@
     </a-scene>
 
     <script>
-      // 画像のタップイベントを追加
+      // DOMがロードされたら実行
       document.addEventListener("DOMContentLoaded", () => {
         const imageElement = document.querySelector("#interactive-image");
-        imageElement.addEventListener("click", () => {
+
+        // タッチとクリックイベントを追加
+        const onImageInteract = () => {
           alert("タップされたよ！");
-        });
+        };
+
+        imageElement.addEventListener("click", onImageInteract);
+        imageElement.addEventListener("touchstart", onImageInteract);
       });
     </script>
   </body>
