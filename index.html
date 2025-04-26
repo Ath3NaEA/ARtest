@@ -3,40 +3,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
-    <style>
-      #message {
-        position: absolute;
-        top: 10%;
-        left: 50%;
-        transform: translateX(-50%);
-        background-color: rgba(0, 0, 0, 0.5);
-        color: white;
-        padding: 10px 20px;
-        border-radius: 5px;
-        font-size: 16px;
-        display: none;
-      }
-    </style>
   </head>
   <body>
-    <div id="message">タップされました！</div>
     <a-scene mindar-image="imageTargetSrc: https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/examples/image-tracking/assets/card-example/card.mind;" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
       <a-entity mindar-image-target="targetIndex: 0">
-        <a-image id="interactive-image" src="image.png" position="0 0 0" height="0.552" width="1" rotation="0 0 0"></a-image>
+        <!-- タップ対象 -->
+        <a-image id="interactive-image" src="image.png" position="0 0 0" height="0.552" width="1"></a-image>
+        <!-- メッセージエリア -->
+        <a-text id="message" value="" position="0 -0.5 0" align="center" color="red" visible="false"></a-text>
       </a-entity>
     </a-scene>
 
     <script>
       document.addEventListener("DOMContentLoaded", () => {
         const imageElement = document.querySelector("#interactive-image");
-        const message = document.querySelector("#message");
+        const messageElement = document.querySelector("#message");
 
         const onImageInteract = () => {
-          message.style.display = "block";
+          messageElement.setAttribute("value", "タップされました！");
+          messageElement.setAttribute("visible", "true");
+
+          // 3秒後にメッセージ非表示
           setTimeout(() => {
-            message.style.display = "none";
-          }, 2000); // 2秒後に非表示
+            messageElement.setAttribute("visible", "false");
+          }, 3000);
         };
 
         imageElement.addEventListener("click", onImageInteract);
