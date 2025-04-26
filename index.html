@@ -12,48 +12,47 @@
     </style>
   </head>
   <body>
-    <!-- videoタグ：スマホ自動再生対応 -->
+    <!-- 動画ファイル -->
     <video
       id="video"
       src="video.mp4"
-      preload="auto"
       loop
-      muted
+      preload="auto"
       playsinline
       webkit-playsinline
-      crossorigin="anonymous">
-    </video>
+      crossorigin="anonymous"
+      muted
+    ></video>
 
+    <!-- A-Frame + MindARシーン -->
     <a-scene
-      mindar-image="imageTargetSrc: https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/examples/image-tracking/assets/card-example/card.mind; autoStart: true;"
+      mindar-image="imageTargetSrc: https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/examples/image-tracking/assets/card-example/card.mind; autoStart: true"
       device-orientation-permission-ui="enabled: true"
-      embedded
       vr-mode-ui="enabled: false"
-      renderer="colorManagement: true; physicallyCorrectLights">
-
+      embedded
+    >
       <a-assets>
-        <video id="videoAsset" src="video.mp4" preload="auto" loop muted playsinline crossorigin="anonymous"></video>
+        <video id="videoAsset" src="video.mp4" loop crossorigin="anonymous" playsinline webkit-playsinline muted></video>
       </a-assets>
 
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
       <a-entity mindar-image-target="targetIndex: 0">
-        <a-video
+        <a-video 
           src="#videoAsset"
-          width="1.5"
+          width="1.5" 
           height="0.84"
-          position="0 0 0"
-          rotation="0 0 0">
+          position="0 0 0">
         </a-video>
       </a-entity>
     </a-scene>
 
+    <!-- ユーザー操作で動画再生 -->
     <script>
-      // スマホの自動再生制限対策（ユーザー操作）
       window.addEventListener("click", () => {
         const video = document.querySelector("#videoAsset");
         if (video && video.paused) {
-          video.play().catch((err) => {
+          video.play().catch(err => {
             console.warn("動画再生エラー:", err);
           });
         }
