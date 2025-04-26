@@ -2,8 +2,8 @@
 <html>
   <head>
     <meta charset="UTF-8" />
-    <title>MindAR Video with Official Marker</title>
-    <script src="https://cdn.jsdelivr.net/npm/aframe@1.5/dist/aframe.min.js"></script>
+    <title>MindAR + Video (iOS対応)</title>
+    <script src="https://cdn.jsdelivr.net/npm/aframe@1.5.0/dist/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
     <style>
       body { margin: 0; overflow: hidden; }
@@ -21,12 +21,10 @@
     </style>
   </head>
   <body>
-    <!-- ✅ スタートボタン -->
     <div id="start-button">
-      <button onclick="startAR()">Start AR</button>
+      <button id="start-ar">Start AR</button>
     </div>
 
-    <!-- ✅ ARシーン -->
     <a-scene
       mindar-image="imageTargetSrc: https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/examples/image-tracking/assets/card-example/card.mind"
       embedded
@@ -47,7 +45,6 @@
         ></video>
       </a-assets>
 
-      <!-- ✅ マーカーターゲット（index 0） -->
       <a-entity mindar-image-target="targetIndex: 0" video-handler>
         <a-video
           src="#my-video"
@@ -61,32 +58,37 @@
       <a-camera position="0 0 0" look-controls="enabled"></a-camera>
     </a-scene>
 
-    <!-- ✅ 動画制御スクリプト -->
     <script>
-      function startAR() {
+      document.querySelector("#start-ar").addEventListener("click", async () => {
         const video = document.querySelector("#my-video");
-        video.play().then(() => {
-          video.pause();
-          document.querySelector("#start-button").style.display = "none";
-          document.querySelector("a-scene").components["mindar-image"].start();
-        });
-      }
 
+        try {
+          // 一度再生して即停止 → ユーザー操作認識対策
+          await video.play();
+          video.pause();
+
+          // UI非表示
+          document.querySelector("#start-button").style.display = "none";
+
+          // MindAR起動
+          const scene = document.querySelector("a-scene");
+          await scene.components["mindar-image"].start();
+
+        } catch (err) {
+          console.error("起動時にエラー:", err);
+          alert("ビデオまたはARの起動に失敗しました。");
+        }
+      });
+
+      // video-handler コンポーネント登録
       AFRAME.registerComponent("video-handler", {
         init: function () {
           const video = document.querySelector("#my-video");
-          let isPlaying = false; // 状態管理フラグを追加
           this.el.addEventListener("targetFound", () => {
-            if (!isPlaying) {
-              video.play();
-              isPlaying = true;
-            }
+            video.play();
           });
           this.el.addEventListener("targetLost", () => {
-            if (isPlaying) {
-              video.pause();
-              isPlaying = false;
-            }
+            video.pause();
           });
         },
       });
