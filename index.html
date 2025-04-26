@@ -2,77 +2,60 @@
 <html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Test2</title>
-    <script src="https://cdn.jsdelivr.net/npm/aframe@1.5.0/dist/aframe.min.js"></script>
+    <title>test1</title>
+    <script src="https://cdn.jsdelivr.net/npm/aframe@1.7.0/dist/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+    <style>
+      body { margin: 0; overflow: hidden; }
+    </style>
   </head>
   <body>
     <a-scene
       mindar-image="imageTargetSrc: https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/examples/image-tracking/assets/card-example/card.mind"
       embedded
       color-space="sRGB"
+      renderer="colorManagement: true, physicallyCorrectLights"
       vr-mode-ui="enabled: false"
       device-orientation-permission-ui="enabled: false"
     >
+      <!-- 読み込む画像 -->
       <a-assets>
-        <video id="my-video" src="video.mp4" preload="auto" crossorigin="anonymous" playsinline webkit-playsinline></video>
-        <img id="thumbnail" src="image.png">
+        <img id="thumbnail" src="image.png" />
       </a-assets>
 
-      <a-camera position="0 0 0" look-controls="enabled: false" cursor="rayOrigin: mouse;" raycaster="objects: .clickable"></a-camera>
-
+      <!-- マーカーターゲット -->
       <a-entity mindar-image-target="targetIndex: 0" id="target">
-        <!-- サムネイル画像 -->
-        <a-image 
-          id="thumbnail-image" 
-          src="#thumbnail" 
-          width="1.78" 
-          height="1" 
-          class="clickable"
-          visible="false"
-          position="0 0 0">
-        </a-image>
-
-        <!-- 動画 -->
-        <a-video 
-          id="video-screen"
-          src="#my-video"
-          width="1.78"
-          height="1"
+        <a-image
+          id="thumbnail-image"
+          src="#thumbnail"
+          width="1"
+          height="0.552"
           position="0 0 0"
-          visible="false">
-        </a-video>
+          visible="false"
+        ></a-image>
       </a-entity>
+
+      <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
     </a-scene>
 
     <script>
-      const video = document.querySelector("#my-video");
-      const thumbnailImage = document.querySelector("#thumbnail-image");
-      const videoScreen = document.querySelector("#video-screen");
-
-      AFRAME.registerComponent("thumbnail-handler", {
+      AFRAME.registerComponent("show-thumbnail-on-detect", {
         init: function () {
-          const target = document.querySelector("#target");
-
-          target.addEventListener("targetFound", () => {
-            thumbnailImage.setAttribute("visible", "true");
+          const thumbnail = document.querySelector("#thumbnail-image");
+          this.el.addEventListener("targetFound", () => {
+            thumbnail.setAttribute("visible", "true");
           });
-
-          target.addEventListener("targetLost", () => {
-            thumbnailImage.setAttribute("visible", "false");
-            videoScreen.setAttribute("visible", "false");
-            video.pause();
-          });
-
-          thumbnailImage.addEventListener("click", () => {
-            thumbnailImage.setAttribute("visible", "false");
-            videoScreen.setAttribute("visible", "true");
-            video.play();
+          this.el.addEventListener("targetLost", () => {
+            thumbnail.setAttribute("visible", "false");
           });
         }
       });
 
-      document.querySelector("#target").setAttribute("thumbnail-handler", "");
+      // id="target" に show-thumbnail-on-detect をつける
+      document.addEventListener("DOMContentLoaded", () => {
+        const target = document.querySelector("#target");
+        target.setAttribute("show-thumbnail-on-detect", "");
+      });
     </script>
   </body>
 </html>
