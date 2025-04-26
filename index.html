@@ -1,61 +1,16 @@
-<!DOCTYPE html>
 <html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>test1</title>
-    <script src="https://cdn.jsdelivr.net/npm/aframe@1.7.0/dist/aframe.min.js"></script>
+    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
-    <style>
-      body { margin: 0; overflow: hidden; }
-    </style>
   </head>
   <body>
-    <a-scene
-      mindar-image="imageTargetSrc: https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/examples/image-tracking/assets/card-example/card.mind"
-      embedded
-      color-space="sRGB"
-      renderer="colorManagement: true, physicallyCorrectLights"
-      vr-mode-ui="enabled: false"
-      device-orientation-permission-ui="enabled: false"
-    >
-      <!-- 読み込む画像 -->
-      <a-assets>
-        <img id="thumbnail" src="image.png" />
-      </a-assets>
-
-      <!-- マーカーターゲット -->
-      <a-entity mindar-image-target="targetIndex: 0" id="target">
-        <a-image
-          id="thumbnail-image"
-          src="#thumbnail"
-          width="1"
-          height="0.552"
-          position="0 0 0"
-          visible="false"
-        ></a-image>
-      </a-entity>
-
+    <a-scene mindar-image="imageTargetSrc: https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/examples/image-tracking/assets/card-example/card.mind;" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+      <a-entity mindar-image-target="targetIndex: 0">
+        <!-- プレーンではなく画像を表示 -->
+        <a-image src="image.png" position="0 0 0" height="0.552" width="1" rotation="0 0 0"></a-image>
+      </a-entity>
     </a-scene>
-
-    <script>
-      AFRAME.registerComponent("show-thumbnail-on-detect", {
-        init: function () {
-          const thumbnail = document.querySelector("#thumbnail-image");
-          this.el.addEventListener("targetFound", () => {
-            thumbnail.setAttribute("visible", "true");
-          });
-          this.el.addEventListener("targetLost", () => {
-            thumbnail.setAttribute("visible", "false");
-          });
-        }
-      });
-
-      // id="target" に show-thumbnail-on-detect をつける
-      document.addEventListener("DOMContentLoaded", () => {
-        const target = document.querySelector("#target");
-        target.setAttribute("show-thumbnail-on-detect", "");
-      });
-    </script>
   </body>
 </html>
