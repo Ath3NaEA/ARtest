@@ -75,11 +75,18 @@
       AFRAME.registerComponent("video-handler", {
         init: function () {
           const video = document.querySelector("#my-video");
+          let isPlaying = false; // 状態管理フラグを追加
           this.el.addEventListener("targetFound", () => {
-            video.play();
+            if (!isPlaying) {
+              video.play();
+              isPlaying = true;
+            }
           });
           this.el.addEventListener("targetLost", () => {
-            video.pause();
+            if (isPlaying) {
+              video.pause();
+              isPlaying = false;
+            }
           });
         },
       });
