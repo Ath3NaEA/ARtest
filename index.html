@@ -1,62 +1,17 @@
-<!DOCTYPE html>
+
 <html>
   <head>
-    <meta charset="utf-8">
-    <title>MindAR Example</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/aframe/mindar-aframe.prod.js"></script>
-    <style>
-      body { margin: 0; overflow: hidden; }
-      video { display: none; }
-    </style>
+    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
   </head>
+  
   <body>
-    <!-- 動画ファイル -->
-    <video
-      id="video"
-      src="video.mp4"
-      loop
-      preload="auto"
-      playsinline
-      webkit-playsinline
-      crossorigin="anonymous"
-      muted
-    ></video>
-
-    <!-- A-Frame + MindARシーン -->
-    <a-scene
-      mindar-image="imageTargetSrc: https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/examples/image-tracking/assets/card-example/card.mind; autoStart: true"
-      device-orientation-permission-ui="enabled: true"
-      vr-mode-ui="enabled: false"
-      embedded
-    >
-      <a-assets>
-        <video id="videoAsset" src="video.mp4" loop crossorigin="anonymous" playsinline webkit-playsinline muted></video>
-      </a-assets>
-
+    <a-scene mindar-image="imageTargetSrc: https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/examples/image-tracking/assets/card-example/card.mind;" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
-
       <a-entity mindar-image-target="targetIndex: 0">
-        <a-video 
-          src="#videoAsset"
-          width="1.5" 
-          height="0.84"
-          position="0 0 0">
-        </a-video>
+        <a-plane color="blue" opaciy="0.5" position="0 0 0" height="0.552" width="1" rotation="0 0 0"></a-plane>
       </a-entity>
     </a-scene>
-
-    <!-- ユーザー操作で動画再生 -->
-    <script>
-      window.addEventListener("click", () => {
-        const video = document.querySelector("#videoAsset");
-        if (video && video.paused) {
-          video.play().catch(err => {
-            console.warn("動画再生エラー:", err);
-          });
-        }
-      });
-    </script>
   </body>
 </html>
