@@ -22,12 +22,12 @@
         const imageElement = document.querySelector("#interactive-image");
         const videoElement = document.querySelector("#video");
 
-        // 動画の再生関数
+        // 動画再生関数
         const playVideo = () => {
-          videoElement.muted = false; // 必要に応じてミュート解除
+          videoElement.muted = false; // ミュート解除
           const playPromise = videoElement.play();
 
-          // 再生が失敗する場合のデバッグ用処理
+          // 再生が失敗する場合のエラーハンドリング
           if (playPromise !== undefined) {
             playPromise.catch((error) => {
               console.error("動画の再生に失敗しました:", error);
