@@ -6,12 +6,13 @@
   </head>
   <body>
     <a-scene mindar-image="imageTargetSrc: https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/examples/image-tracking/assets/card-example/card.mind;" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
+      <!-- カメラ設定 -->
       <a-camera position="0 0 0" look-controls="enabled: false" cursor="fuse: false; rayOrigin: mouse;" raycaster="far: 10000; objects: .clickable"></a-camera>
-      
+
       <a-entity mindar-image-target="targetIndex: 0">
         <!-- 動画 (初期状態で再生停止) -->
-        <a-video id="video" src="video.mp4" position="0 0 0" height="0.552" width="1" autoplay="false" loop="true" muted></a-video>
-        
+        <a-video id="video" src="video.mp4" position="0 0 0" height="0.552" width="1" autoplay="false" loop="true" webkit-playsinline playsinline muted></a-video>
+
         <!-- タップ可能な画像 -->
         <a-image class="clickable" id="interactive-image" src="image.png" position="0 0 0.1" height="0.552" width="1"></a-image>
       </a-entity>
@@ -22,17 +23,13 @@
         const imageElement = document.querySelector("#interactive-image");
         const videoElement = document.querySelector("#video");
 
-        // 動画再生関数
+        // 動画再生処理
         const playVideo = () => {
           videoElement.muted = false; // ミュート解除
-          const playPromise = videoElement.play();
-
-          // 再生が失敗する場合のエラーハンドリング
-          if (playPromise !== undefined) {
-            playPromise.catch((error) => {
-              console.error("動画の再生に失敗しました:", error);
-            });
-          }
+          videoElement.setAttribute("autoplay", "true"); // 動画の自動再生を有効にセット
+          videoElement.play().catch((error) => {
+            console.error("動画の再生に失敗しました:", error);
+          });
         };
 
         // 画像タップ時の処理
