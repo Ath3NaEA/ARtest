@@ -1,45 +1,40 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
-    <title>Mobile Video Example</title>
+    <meta charset="utf-8">
+    <title>Video Playback</title>
+    <meta name="description" content="Video Playback with A-Frame">
+    <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
+    <script src="path/to/play-on-click.js"></script> <!-- プレイオンクリックスクリプト -->
+    <script src="path/to/hide-on-play.js"></script> <!-- ハイドオンプレイスクリプト -->
   </head>
   <body>
     <a-scene>
-      <!-- 動画を定義 -->
       <a-assets>
-        <video id="video" preload="auto" src="video.mp4"></video>
+        <video id="videoCustom" preload="auto"
+               src="path/to/video.mp4"
+               width="160" height="90" autoplay loop="true"
+               crossOrigin="anonymous" muted></video>
       </a-assets>
 
-      <!-- 動画を表示するスクリーン -->
-      <a-plane 
-        src="#video" 
-        position="0 1.5 -3" 
-        width="4" 
-        height="2"
-        class="clickable">
-      </a-plane>
+      <a-entity material="shader: flat; src: #videoCustom"
+                geometry="primitive: plane; width: 160; height: 90;"
+                position="0 60 -250"
+                play-on-click
+                visible="false">
+      </a-entity>
+
+      <a-camera>
+        <a-entity
+          position="0 0 -1.5"
+          text="align: center;
+                width: 6;
+                wrapCount: 100;
+                color: black;
+                value: Tap to start the video"
+          hide-on-play="#videoCustom">
+        </a-entity>
+      </a-camera>
     </a-scene>
-
-    <script>
-      document.addEventListener('DOMContentLoaded', () => {
-        const video = document.querySelector('#video');
-        const plane = document.querySelector('.clickable');
-
-        // ユーザークリックで動画を再生
-        plane.addEventListener('click', () => {
-          if (video.paused) {
-            video.play().catch(err => {
-              console.log('再生エラー:', err);
-              alert('動画の再生に失敗しました。ブラウザ設定を確認してください。');
-            });
-          } else {
-            video.pause();
-          }
-        });
-      });
-    </script>
   </body>
 </html>
