@@ -1,61 +1,40 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+    <meta charset="utf-8">
+    <title>Video Playback</title>
+    <meta name="description" content="Video Playback with A-Frame">
+    <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
+    <script src="path/to/play-on-click.js"></script> <!-- プレイオンクリックスクリプト -->
+    <script src="path/to/hide-on-play.js"></script> <!-- ハイドオンプレイスクリプト -->
   </head>
   <body>
-    <a-scene
-      mindar-image="imageTargetSrc: https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/examples/image-tracking/assets/card-example/card.mind;"
-      vr-mode-ui="enabled: false"
-      device-orientation-permission-ui="enabled: false">
+    <a-scene>
+      <a-assets>
+        <video id="videoCustom" preload="auto"
+               src="path/to/video.mp4"
+               width="160" height="90" autoplay loop="true"
+               crossOrigin="anonymous" muted></video>
+      </a-assets>
 
-      <!-- カメラ設定 -->
-      <a-camera position="0 0 0"
-                look-controls="enabled: false"
-                cursor="fuse: false; rayOrigin: mouse;"
-                raycaster="far: 10000; objects: .clickable"></a-camera>
-
-      <!-- AR画像ターゲット -->
-      <a-entity mindar-image-target="targetIndex: 0">
-        <!-- 動画 (初期状態で再生停止) -->
-        <a-video id="video" src="video.mp4"
-                 position="0 0 0" height="0.552" width="1"
-                 autoplay="false" loop="true"
-                 webkit-playsinline playsinline muted></a-video>
-
-        <!-- インタラクティブ画像 -->
-        <a-image class="clickable" id="interactive-image"
-                 src="image.png"
-                 position="0 0 0.1" height="0.552" width="1"></a-image>
+      <a-entity material="shader: flat; src: #videoCustom"
+                geometry="primitive: plane; width: 160; height: 90;"
+                position="0 60 -250"
+                play-on-click
+                visible="false">
       </a-entity>
+
+      <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+        <a-entity
+          position="0 0 -1.5"
+          text="align: center;
+                width: 6;
+                wrapCount: 100;
+                color: black;
+                value: Tap to start the video"
+          hide-on-play="#videoCustom">
+        </a-entity>
+      </a-camera>
     </a-scene>
-
-    <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        const imageElement = document.querySelector("#interactive-image");
-        const videoElement = document.querySelector("#video");
-
-        // 動画再生関数
-        const playVideo = () => {
-          videoElement.muted = false; // ミュート解除
-          videoElement.setAttribute("autoplay", "true"); // 自動再生を有効化
-          videoElement.play().catch((error) => {
-            console.error("動画再生に失敗しました:", error);
-          });
-        };
-
-        // 画像タップ処理
-        const onImageTap = () => {
-          imageElement.setAttribute("visible", "false"); // 画像非表示
-          playVideo(); // 動画再生
-        };
-
-        // タップイベント設定
-        imageElement.addEventListener("click", onImageTap);
-        imageElement.addEventListener("touchstart", onImageTap);
-      });
-    </script>
   </body>
 </html>
