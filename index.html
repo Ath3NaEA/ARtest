@@ -9,7 +9,12 @@
         const interactiveImage = document.querySelector('#interactive-image');
         if (interactiveImage) {
           interactiveImage.addEventListener('click', function () {
-            alert('タップされました');
+            <a-entity material="shader: flat; src: #videoCustom"
+                geometry="primitive: plane; width: 160; height: 90;"
+                position="0 60 -250"
+                play-on-click
+                visible="false">
+            </a-entity>
           });
         }
       });
@@ -23,6 +28,11 @@
       <a-entity mindar-image-target="targetIndex: 0">
         <!-- タップ可能な画像 -->
         <a-image class="clickable" id="interactive-image" src="image.png" position="0 0 0.1" height="0.552" width="1"></a-image>
+        <video id="videoCustom" preload="auto"
+               src="video.mp4"
+               width="160" height="90" autoplay loop="true"
+               crossOrigin="anonymous" muted>
+        </video>
       </a-entity>
     </a-scene>
   </body>
