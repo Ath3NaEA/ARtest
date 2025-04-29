@@ -30,7 +30,8 @@
         <a-image class="clickable" id="interactive-image" src="image.png" position="0 0 0.1" height="0.552" width="1"></a-image>
         
         <!-- 動画再生用エンティティ -->
-        <a-entity id="video-entity" visible="false" play-on-click material="shader: flat; src: #videoCustom" geometry="primitive: plane; width: 160; height: 90;" position="0 0 -1">
+        <a-entity id="video-entity" visible="false" play-on-click material="shader: flat; src: #videoCustom" 
+          geometry="primitive: plane; width: 1; height: 0.552;" position="0 0 0.1">
           <video id="videoCustom" preload="auto" src="video.mp4" crossOrigin="anonymous" muted></video>
         </a-entity>
       </a-entity>
