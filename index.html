@@ -3,19 +3,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
-    <script src="path/to/play-on-click.js"></script>
     <script>
       // スクリプトでクリックイベントを設定
       document.addEventListener('DOMContentLoaded', function () {
         const interactiveImage = document.querySelector('#interactive-image');
+        const videoEntity = document.querySelector('#video-entity');
+
         if (interactiveImage) {
           interactiveImage.addEventListener('click', function () {
-            <a-entity material="shader: flat; src: #videoCustom"
-                geometry="primitive: plane; width: 160; height: 90;"
-                position="0 60 -250"
-                play-on-click
-                visible="false">
-            </a-entity>
+            // video-entity を表示して play-on-click をトリガー
+            videoEntity.setAttribute('visible', 'true');
+            const videoEl = document.querySelector('#videoCustom');
+            if (videoEl) videoEl.play();
           });
         }
       });
@@ -29,11 +28,11 @@
       <a-entity mindar-image-target="targetIndex: 0">
         <!-- タップ可能な画像 -->
         <a-image class="clickable" id="interactive-image" src="image.png" position="0 0 0.1" height="0.552" width="1"></a-image>
-        <video id="videoCustom" preload="auto"
-               src="video.mp4"
-               width="160" height="90" autoplay loop="true"
-               crossOrigin="anonymous" muted>
-        </video>
+        
+        <!-- 動画再生用エンティティ -->
+        <a-entity id="video-entity" visible="false" play-on-click material="shader: flat; src: #videoCustom" geometry="primitive: plane; width: 160; height: 90;" position="0 0 -1">
+          <video id="videoCustom" preload="auto" src="video.mp4" crossOrigin="anonymous" muted></video>
+        </a-entity>
       </a-entity>
     </a-scene>
   </body>
