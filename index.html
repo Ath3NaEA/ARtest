@@ -1,77 +1,69 @@
+<!DOCTYPE html>
 <html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
     <script>
-      // スクリプトでクリックイベントを設定
+      // クリックで画像非表示＆動画再生
       document.addEventListener('DOMContentLoaded', function () {
         const interactiveImage = document.querySelector('#interactive-image');
         const videoEntity = document.querySelector('#video-entity');
+        const videoEl = document.querySelector('#videoCustom');
 
         if (interactiveImage) {
           interactiveImage.addEventListener('click', function () {
-            // video-entity を表示して play-on-click をトリガー
-            videoEntity.setAttribute('visible', 'true');
-            const videoEl = document.querySelector('#videoCustom');
-            if (videoEl) videoEl.play();
+            interactiveImage.setAttribute('opacity', '0');       // 画像を透明に
+            videoEntity.setAttribute('visible', 'true');         // 動画面を表示
+            if (videoEl) videoEl.play();                         // 動画再生
           });
         }
       });
     </script>
   </head>
   <body>
-    <a-scene mindar-image="imageTargetSrc: https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/examples/image-tracking/assets/card-example/card.mind;" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
+    <a-scene
+      mindar-image="imageTargetSrc: https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/examples/image-tracking/assets/card-example/card.mind;"
+      vr-mode-ui="enabled: false"
+      device-orientation-permission-ui="enabled: false"
+    >
       <!-- カメラ設定 -->
-      <a-camera position="0 0 0" look-controls="enabled: false" cursor="fuse: false; rayOrigin: mouse;" raycaster="far: 10000; objects: .clickable"></a-camera>
+      <a-camera
+        position="0 0 0"
+        look-controls="enabled: false"
+        cursor="fuse: false; rayOrigin: mouse;"
+        raycaster="far: 10000; objects: .clickable"
+      ></a-camera>
 
+      <!-- マーカーに反応するエンティティ -->
       <a-entity mindar-image-target="targetIndex: 0">
         <!-- タップ可能な画像 -->
-        <a-image class="clickable" id="interactive-image" src="image.png" position="0 0 0.1" height="0.552" width="1"></a-image>
-        
-        <!-- 動画再生用エンティティ -->
-        <a-entity id="video-entity" visible="false" play-on-click material="shader: flat; src: #videoCustom" 
-          geometry="primitive: plane; width: 1; height: 0.552;" position="0 0 0.1">
-          <video id="videoCustom" preload="auto" src="video.mp4" crossOrigin="anonymous" muted></video>
+        <a-image
+          id="interactive-image"
+          class="clickable"
+          src="image.png"
+          position="0 0 0.1"
+          width="1"
+          height="0.552"
+        ></a-image>
+
+        <!-- 動画再生用 -->
+        <a-entity
+          id="video-entity"
+          visible="false"
+          material="shader: flat; src: #videoCustom"
+          geometry="primitive: plane; width: 1; height: 0.552;"
+          position="0 0 0.1"
+        >
+          <video
+            id="videoCustom"
+            src="video.mp4"
+            preload="auto"
+            crossOrigin="anonymous"
+            muted
+          ></video>
         </a-entity>
       </a-entity>
     </a-scene>
-    <script>
-      document.addEventListener('DOMContentLoaded', function () {
-        const interactiveImage = document.querySelector('#interactive-image');
-        const videoEntity = document.querySelector('#video-entity');
-    
-        if (interactiveImage) {
-          interactiveImage.addEventListener('click', function () {
-            // 画像を透明にする
-            interactiveImage.setAttribute('opacity', '0');
-    
-            // video-entity を表示して play-on-click をトリガー
-            videoEntity.setAttribute('visible', 'true');
-            const videoEl = document.querySelector('#videoCustom');
-            if (videoEl) videoEl.play();
-          });
-        }
-      });
-    </script>
-    <script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const interactiveImage = document.querySelector('#interactive-image');
-    const videoEntity = document.querySelector('#video-entity');
-
-    if (interactiveImage) {
-      interactiveImage.addEventListener('click', function () {
-        // 画像を透明にする
-        interactiveImage.setAttribute('opacity', '0');
-
-        // video-entity を表示して play-on-click をトリガー
-        videoEntity.setAttribute('visible', 'true');
-        const videoEl = document.querySelector('#videoCustom');
-        if (videoEl) videoEl.play();
-      });
-    }
-  });
-</script>
-    
   </body>
 </html>
